@@ -10,6 +10,9 @@ Data included in this folder will be raw csv files and folders of GIS data. Curr
 * vegetation protected land/ national park service
 * topography (Pedro, Sara)
 * power lines (Jack)
-* population density - census data (age income) (Kieran)
+* **ca_demogs** - census data (age income) (Kieran)
+  * Contains demographic data by country for the state of California from 2010 to 2019
+  * Key demographics include population, population by gender, population by age band, median age
+  * source: https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html
 * road data (Jack)
 * NIHC (additional fire data) (Sara)
