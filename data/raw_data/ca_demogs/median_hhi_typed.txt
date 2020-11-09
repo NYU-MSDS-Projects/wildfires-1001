@@ -1,0 +1,60 @@
+fips1	name	medianHII2018	percentOfState
+6000	California	"$75,250 "	100.00%
+6001	"Alameda County, CA"	"$101,744 "	135.20%
+6003	"Alpine County, CA"	"$55,384 "	73.60%
+6005	"Amador County, CA"	"$58,515 "	77.80%
+6007	"Butte County, CA"	"$50,945 "	67.70%
+6009	"Calaveras County, CA"	"$62,984 "	83.70%
+6011	"Colusa County, CA"	"$57,249 "	76.10%
+6013	"Contra Costa County, CA"	"$101,463 "	134.80%
+6015	"Del Norte County, CA"	"$48,518 "	64.50%
+6017	"El Dorado County, CA"	"$81,869 "	108.80%
+6019	"Fresno County, CA"	"$52,318 "	69.50%
+6021	"Glenn County, CA"	"$47,365 "	62.90%
+6023	"Humboldt County, CA"	"$49,471 "	65.70%
+6025	"Imperial County, CA"	"$46,633 "	62.00%
+6027	"Inyo County, CA"	"$53,793 "	71.50%
+6029	"Kern County, CA"	"$51,586 "	68.60%
+6031	"Kings County, CA"	"$58,255 "	77.40%
+6033	"Lake County, CA"	"$45,086 "	59.90%
+6035	"Lassen County, CA"	"$57,705 "	76.70%
+6037	"Los Angeles County, CA"	"$67,986 "	90.30%
+6039	"Madera County, CA"	"$53,632 "	71.30%
+6041	"Marin County, CA"	"$122,933 "	163.40%
+6043	"Mariposa County, CA"	"$51,402 "	68.30%
+6045	"Mendocino County, CA"	"$51,386 "	68.30%
+6047	"Merced County, CA"	"$56,169 "	74.60%
+6049	"Modoc County, CA"	"$45,227 "	60.10%
+6051	"Mono County, CA"	"$66,499 "	88.40%
+6053	"Monterey County, CA"	"$69,665 "	92.60%
+6055	"Napa County, CA"	"$85,624 "	113.80%
+6057	"Nevada County, CA"	"$66,681 "	88.60%
+6059	"Orange County, CA"	"$89,373 "	118.80%
+6061	"Placer County, CA"	"$89,175 "	118.50%
+6063	"Plumas County, CA"	"$55,079 "	73.20%
+6065	"Riverside County, CA"	"$66,793 "	88.80%
+6067	"Sacramento County, CA"	"$69,475 "	92.30%
+6069	"San Benito County, CA"	"$80,063 "	106.40%
+6071	"San Bernardino County, CA"	"$63,310 "	84.10%
+6073	"San Diego County, CA"	"$78,777 "	104.70%
+6075	"San Francisco County/city, CA"	"$110,601 "	147.00%
+6077	"San Joaquin County, CA"	"$63,567 "	84.50%
+6079	"San Luis Obispo County, CA"	"$70,626 "	93.90%
+6081	"San Mateo County, CA"	"$122,930 "	163.40%
+6083	"Santa Barbara County, CA"	"$75,646 "	100.50%
+6085	"Santa Clara County, CA"	"$125,933 "	167.40%
+6087	"Santa Cruz County, CA"	"$84,213 "	111.90%
+6089	"Shasta County, CA"	"$53,908 "	71.60%
+6091	"Sierra County, CA"	"$52,308 "	69.50%
+6093	"Siskiyou County, CA"	"$47,560 "	63.20%
+6095	"Solano County, CA"	"$82,808 "	110.00%
+6097	"Sonoma County, CA"	"$81,002 "	107.60%
+6099	"Stanislaus County, CA"	"$59,616 "	79.20%
+6101	"Sutter County, CA"	"$57,879 "	76.90%
+6103	"Tehama County, CA"	"$47,572 "	63.20%
+6105	"Trinity County, CA"	"$40,680 "	54.10%
+6107	"Tulare County, CA"	"$48,763 "	64.80%
+6109	"Tuolumne County, CA"	"$56,500 "	75.10%
+6111	"Ventura County, CA"	"$84,170 "	111.90%
+6113	"Yolo County, CA"	"$67,804 "	90.10%
+6115	"Yuba County, CA"	"$47,504 "	63.10%

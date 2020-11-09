@@ -5,3 +5,14 @@ Data included in this folder will be raw csv files and folders of GIS data. Curr
 * **fire_gis**:
   * Folder of gis data on historical wildfires from 1878-2019
   * source: https://www.arcgis.com/home/item.html?id=5ebe3297c4eb45c2a8f5078ab40c8285
+* arson data (Kieran)
+* weather data (NOAA and any other - Pedro)
+* vegetation protected land/ national park service
+* topography (Pedro, Sara)
+* power lines (Jack)
+* **ca_demogs** - census data (age income) (Kieran)
+  * Contains demographic data by country for the state of California from 2010 to 2019
+  * Key demographics include population, population by gender, population by age band, median age
+  * source: https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html
+* road data (Jack)
+* NIHC (additional fire data) (Sara)
