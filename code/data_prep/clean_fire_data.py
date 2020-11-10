@@ -27,7 +27,7 @@ fire_gdb = {}
 for file in os.listdir(os.path.join(home_dir, 'wildfires-1001/data/raw_data/fire_gis.gdb')):
     if fnmatch.fnmatch(file, '*.gdbtable'):
         key = str.replace(file, '.gdbtable', '')
-        fire_gdb[key] = gpd.read_file(os.path.join(os.path.join(home_dir, 'wildfires-1001/data/raw_data/fire_gis.gdb', fire)))
+        fire_gdb[key] = gpd.read_file(os.path.join(os.path.join(home_dir, 'wildfires-1001/data/raw_data/fire_gis.gdb', file)))
 
         
 '''
@@ -43,10 +43,12 @@ print("Starting fire_data shape: {}".format(fire_data.shape))
 fire_data = fire_data.dropna(subset = ['YEAR_', 'ALARM_DATE', 'CONT_DATE'], axis = 0)
 print("fire_data shape after removing NaNs in key fields: {}".format(fire_data.shape))
 
-#Convert ALARM_DATE and CONT_DATE to datetime objects rather than strings
-fire_data[['ALARM_DATE', 'CONT_DATE']] = fire_data[['ALARM_DATE', 'CONT_DATE']].astype(str).apply(lambda x: x[:str.find(x,'T')])
-fire_data[['ALARM_DATE', 'CONT_DATE']] = pd.to_datetime(fire_data[['ALARM_DATE', 'CONT_DATE']], format = '%Y-%m-%d', \
-                                                        errors = 'coerce')
+#Convert ALARM_DATE and CONT_DATE to cleaner strings (we have to convert to datetime in python bc geopandas data file types don't
+#work with datetime times
+fire_data['ALARM_DATE'] = fire_data['ALARM_DATE'].astype(str).apply(lambda x: x[:str.find(x,'T')])
+fire_data['CONT_DATE'] = fire_data['CONT_DATE'].astype(str).apply(lambda x: x[:str.find(x,'T')])
+#fire_data['ALARM_DATE'] = pd.to_datetime(fire_data['ALARM_DATE'], format = '%Y-%m-%d',errors = 'coerce')
+#fire_data['CONT_DATE'] = pd.to_datetime(fire_data['CONT_DATE'], format = '%Y-%m-%d',errors = 'coerce')
 '''
 Create fire_key (unique identifier for fires which is a string of FIRE_NAME + YEAR + INC_NUM (incident number) + FIRE_NUM
 FIRE_NUM and INC_NUM are different identifiers likely from different agencies in CA that are responsible for tracking fires
@@ -65,7 +67,7 @@ fire_data['FIRE_NUM'] = np.where(fire_data['FIRE_NUM'].isna() == True, 'NF', \
 fire_data['FIRE_NAME'] = np.where(fire_data['FIRE_NAME'].isna() == True, '', fire_data['FIRE_NAME'])
 
 fire_data['FIRE_KEY'] = fire_data['FIRE_NAME'].apply(lambda x: str.replace(x, ' ', '')) +'_'+ fire_data['YEAR_'] +'_'+\
-                        fire_data['INC_NUM'] +'_'+ fire_data1['FIRE_NUM']
+                        fire_data['INC_NUM'] +'_'+ fire_data['FIRE_NUM']
 
 #Convert YEAR_ from object to int and save as YEAR. Also remove any records where YEAR = NA
 fire_data = fire_data[fire_data['YEAR_']!='']
@@ -75,8 +77,8 @@ fire_data = fire_data[fire_data['YEAR']>=min_year]
 print("fire_data shape after limiting to year >= {}: {}".format(min_year, fire_data.shape))
 
 #Drop rows we don't need (keeping a bunch bc not sure what will be useful - need to do some more research
-fire_data.drop_cols(['UNIT_ID', 'YEAR_', 'STATE', 'COMMENTS'], axis = 1, inplace = True)
+fire_data.drop(['UNIT_ID', 'YEAR_', 'STATE', 'COMMENTS'], axis = 1, inplace = True)
 
-
+fire_data.to_file(os.path.join(home_dir, 'wildfires-1001/data/clean_data/fire_gis'))
 
                                       
