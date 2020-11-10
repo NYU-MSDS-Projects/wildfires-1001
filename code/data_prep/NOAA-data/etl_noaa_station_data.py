@@ -1,0 +1,133 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # NOAA Data
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+
+
+# In[ ]:
+
+
+#Set main git directory
+gitdir = 'C:\\Users\jades\\1001 Intro to Data Science Notebooks\\Project\\wildfires-1001\\'
+
+
+# In[137]:
+
+
+fileNames = ['USC00040136', 'USC00040192', 'USC00040212', 'USC00040232',
+'USC00040343', 'USC00040383', 'USC00040449', 'USC00040521',
+'USC00040673', 'USC00040693', 'USC00040741', 'USC00040931',
+'USC00040943', 'USC00040983', 'USC00041018', 'USC00041072',
+'USC00041194', 'USC00041244', 'USC00041253', 'USC00041277',
+'USC00041312', 'USC00041424', 'USC00041497', 'USC00041534',
+'USC00041614', 'USC00041697', 'USC00041700', 'USC00041715',
+'USC00041758', 'USC00041806', 'USC00041838', 'USC00041864',
+'USC00041912', 'USC00041948', 'USC00041990', 'USC00042012',
+'USC00042214', 'USC00042239', 'USC00042294', 'USC00042319',
+'USC00042402', 'USC00042500', 'USC00042574', 'USC00042598',
+'USC00042706', 'USC00042713', 'USC00042805', 'USC00042863',
+'USC00042920', 'USC00042934', 'USC00042941', 'USC00043083',
+'USC00043157', 'USC00043161', 'USC00043182', 'USC00043191',
+'USC00043261', 'USC00043384', 'USC00043402', 'USC00043417',
+'USC00043463', 'USC00043573', 'USC00043578', 'USC00043714',
+'USC00043747', 'USC00043761', 'USC00043824', 'USC00043855',
+'USC00043875', 'USC00043896', 'USC00043914', 'USC00043939',
+'USC00044025', 'USC00044211', 'USC00044223', 'USC00044259',
+'USC00044297', 'USC00044374', 'USC00044412', 'USC00044500',
+'USC00044534', 'USC00044555', 'USC00044712', 'USC00044838',
+'USC00044881', 'USC00044890', 'USC00044957', 'USC00044997',
+'USC00045026', 'USC00045064', 'USC00045118', 'USC00045233',
+'USC00045311', 'USC00045360', 'USC00045449', 'USC00045532',
+'USC00045679', 'USC00045756', 'USC00045915', 'USC00045933',
+'USC00045941', 'USC00045983', 'USC00046074', 'USC00046136',
+'USC00046144', 'USC00046154', 'USC00046168', 'USC00046175',
+'USC00046252', 'USC00046336', 'USC00046377', 'USC00046399',
+'USC00046506', 'USC00046521', 'USC00046624', 'USC00046657',
+'USC00046685', 'USC00046699', 'USC00046719', 'USC00046730',
+'USC00046773', 'USC00046826', 'USC00046926', 'USC00047085',
+'USC00047109', 'USC00047195', 'USC00047253', 'USC00047339',
+'USC00047414', 'USC00047643', 'USC00047767', 'USC00047813',
+'USC00047851', 'USC00047888', 'USC00047902', 'USC00047916',
+'USC00047965', 'USC00048045', 'USC00048135', 'USC00048218',
+'USC00048351', 'USC00048353', 'USC00048380', 'USC00048587',
+'USC00048606', 'USC00048702', 'USC00048713', 'USC00048758',
+'USC00048839', 'USC00048917', 'USC00048999', 'USC00049001',
+'USC00049026', 'USC00049035', 'USC00049053', 'USC00049073',
+'USC00049099', 'USC00049111', 'USC00049152', 'USC00049325',
+'USC00049367', 'USC00049378', 'USC00049452', 'USC00049473',
+'USC00049490', 'USC00049621', 'USC00049694', 'USC00049699',
+'USC00049742', 'USC00049781', 'USC00049785', 'USC00049855',
+'USC00049866', 'USS0019L03S', 'USS0019L05S', 'USS0019L06S',
+'USS0019L07S', 'USS0019L08S', 'USS0019L13S', 'USS0019L17S',
+'USS0019L19S', 'USS0019L24S', 'USS0019L38S', 'USS0019L39S',
+'USS0019L40S', 'USS0020H06S', 'USS0020H12S', 'USS0020H13S',
+'USS0020K03S', 'USS0020K04S', 'USS0020K13S', 'USS0020K25S',
+'USS0020K27S', 'USS0020K30S', 'USS0020K31S', 'USS0020L02S',
+'USS0020L06S', 'USS0020L10S', 'USW00003104', 'USW00003122',
+'USW00003144', 'USW00003159', 'USW00023110', 'USW00023119',
+'USW00023129', 'USW00023130', 'USW00023136', 'USW00023155',
+'USW00023157', 'USW00023158', 'USW00023161', 'USW00023174',
+'USW00023179', 'USW00023182', 'USW00023187', 'USW00023188',
+'USW00023190', 'USW00023191', 'USW00023199', 'USW00023225',
+'USW00023230', 'USW00023232', 'USW00023233', 'USW00023234',
+'USW00023237', 'USW00023258', 'USW00023259', 'USW00023271',
+'USW00023272', 'USW00023273', 'USW00023275', 'USW00024213',
+'USW00024216', 'USW00024257', 'USW00024259', 'USW00024286',
+'USW00093104', 'USW00093107', 'USW00093111', 'USW00093112',
+'USW00093134', 'USW00093193', 'USW00093209', 'USW00093230']
+
+
+# In[170]:
+
+
+#Tell the reader how many characters are in each column
+pre = [11,4,2,4] #The first 4 columns
+arr = [5,1,1,1] #The pattern of the next 4x31 columns
+widths = np.concatenate((pre, np.tile(arr, 31)))
+
+#List the columns for us to use later
+columns = ['ID', 'YEAR', 'MONTH', 'ELEMENT'] #The first 4 columns
+
+for i in range(1,32):
+    columns.append('VALUE' + str(i)) #The pattern of the next 4x31 columns
+    columns.append('MFLAG' + str(i))
+    columns.append('QFLAG' + str(i))
+    columns.append('SFLAG' + str(i))
+    
+subdir = 'data\\raw_data\\NOAA-station-data\\'
+
+for fileName in fileNames[:10]:
+    
+    print('Reading ' + fileName)
+
+    #Import the data
+    #df = pd.read_fwf('ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/USW00012815.dly', header=None, widths=widths)
+    df = pd.read_fwf('ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/' + fileName + '.dly', header=None, widths=widths)
+    df.columns = columns #Rename the columns
+    
+    print('Formatting ' + fileName)
+
+    #Drop the unnecessary columns
+    for i in range(1,32):
+        df = df.drop('MFLAG' + str(i), axis=1) #This tracks whether it rained in the last 12 month but isn't reliable
+        df = df.drop('QFLAG' + str(i), axis=1) #This tracks the quality of the report
+        df = df.drop('SFLAG' + str(i), axis=1) #This tracks the source of the report
+
+    #Unpivot the days into a single column
+    df = df.melt(id_vars=['ID', 'YEAR', 'MONTH', 'ELEMENT'],var_name='DAY',value_name='VALUE')
+    df['DAY'] = df['DAY'].astype(str).str[5:]
+
+    #Pivot the element types into separate columns
+    df = pd.pivot_table(df, values='VALUE', index=['ID','YEAR','MONTH','DAY'], columns='ELEMENT').reset_index()
+    
+    print('Saving ' + fileName + ' as csv')
+
+    filename_to = fileName + '.csv'
+    df.to_csv(gitdir + subdir + filename_to, index=False)
+
