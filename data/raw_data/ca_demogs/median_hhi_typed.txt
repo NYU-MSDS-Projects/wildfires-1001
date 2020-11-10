@@ -1,4 +1,4 @@
-fips1	name	medianHII2018	percentOfState
+fips1	name	medianHHI2018	percentOfState
 6000	California	"$75,250 "	100.00%
 6001	"Alameda County, CA"	"$101,744 "	135.20%
 6003	"Alpine County, CA"	"$55,384 "	73.60%

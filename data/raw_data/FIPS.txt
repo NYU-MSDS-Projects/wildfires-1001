@@ -1,0 +1,58 @@
+Alameda County, 06001 FIPS Code, California
+Alpine County, 06003 FIPS Code, California
+Amador County, 06005 FIPS Code, California
+Butte County, 06007 FIPS Code, California
+Calaveras County, 06009 FIPS Code, California
+Colusa County, 06011 FIPS Code, California
+Contra Costa County, 06013 FIPS Code, California
+Del Norte County, 06015 FIPS Code, California
+El Dorado County, 06017 FIPS Code, California
+Fresno County, 06019 FIPS Code, California
+Glenn County, 06021 FIPS Code, California
+Humboldt County, 06023 FIPS Code, California
+Imperial County, 06025 FIPS Code, California
+Inyo County, 06027 FIPS Code, California
+Kern County, 06029 FIPS Code, California
+Kings County, 06031 FIPS Code, California
+Lake County, 06033 FIPS Code, California
+Lassen County, 06035 FIPS Code, California
+Los Angeles County, 06037 FIPS Code, California
+Madera County, 06039 FIPS Code, California
+Marin County, 06041 FIPS Code, California
+Mariposa County, 06043 FIPS Code, California
+Mendocino County, 06045 FIPS Code, California
+Merced County, 06047 FIPS Code, California
+Modoc County, 06049 FIPS Code, California
+Mono County, 06051 FIPS Code, California
+Monterey County, 06053 FIPS Code, California
+Napa County, 06055 FIPS Code, California
+Nevada County, 06057 FIPS Code, California
+Orange County, 06059 FIPS Code, California
+Placer County, 06061 FIPS Code, California
+Plumas County, 06063 FIPS Code, California
+Riverside County, 06065 FIPS Code, California
+Sacramento County, 06067 FIPS Code, California
+San Benito County, 06069 FIPS Code, California
+San Bernardino County, 06071 FIPS Code, California
+San Diego County, 06073 FIPS Code, California
+San Francisco County, 06075 FIPS Code, California
+San Joaquin County, 06077 FIPS Code, California
+San Luis Obispo County, 06079 FIPS Code, California
+San Mateo County, 06081 FIPS Code, California
+Santa Barbara County, 06083 FIPS Code, California
+Santa Clara County, 06085 FIPS Code, California
+Santa Cruz County, 06087 FIPS Code, California
+Shasta County, 06089 FIPS Code, California
+Sierra County, 06091 FIPS Code, California
+Siskiyou County, 06093 FIPS Code, California
+Solano County, 06095 FIPS Code, California
+Sonoma County, 06097 FIPS Code, California
+Stanislaus County, 06099 FIPS Code, California
+Sutter County, 06101 FIPS Code, California
+Tehama County, 06103 FIPS Code, California
+Trinity County, 06105 FIPS Code, California
+Tulare County, 06107 FIPS Code, California
+Tuolumne County, 06109 FIPS Code, California
+Ventura County, 06111 FIPS Code, California
+Yolo County, 06113 FIPS Code, California
+Yuba County, 06115 FIPS Code, California
