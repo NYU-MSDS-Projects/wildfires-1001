@@ -44,7 +44,7 @@ def points_from_polygons(polygons, crs):
     return points
 
 
-def generate_grid(geom, width, height):
+def generate_grid(geom, width, height, crs):
     '''
     Purpose: generate grid with equal-sized areas within bounds of a larger option 
     --------
@@ -54,6 +54,7 @@ def generate_grid(geom, width, height):
         - geom : .geometry object (polygon or multipolygon)
         - width : int, width of grid square or rectangle
         - height : int, height of grid square or rectangle
+        - crs : coordinate measurement unit
     Returns:
     --------
         - grid: new GeoDataFrame with grid polygons as .geometry (grid object will be a rectangle of grids between the 
@@ -69,8 +70,17 @@ def generate_grid(geom, width, height):
         for y in rows:
             polygons.append( Polygon([(x,y), (x+width, y), (x+width, y-height), (x, y-height)]) )
 
-    grid = gpd.GeoDataFrame({'geometry':polygons})
+    grid = gpd.GeoDataFrame({'geometry':polygons}, crs={'init' :f'epsg:{crs}'})
     return grid
+
+def MetersToLatLon(mx, my):
+    "Converts XY point from Spherical Mercator EPSG:900913 to lat/lon in WGS84 Datum"
+
+    lon = (mx / originShift) * 180.0
+    lat = (my / originShift) * 180.0
+
+    lat = 180 / math.pi * (2 * math.atan( math.exp( lat * math.pi / 180.0)) - math.pi / 2.0)
+    return lat, lon
     
     
     
