@@ -14,5 +14,7 @@ Data included in this folder will be raw csv files and folders of GIS data. Curr
   * Contains demographic data by country for the state of California from 2010 to 2019
   * Key demographics include population, population by gender, population by age band, median age
   * source: https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html
+  * altenate sources: http://www.dof.ca.gov/Reports/Demographic_Reports/documents/2010-1850_STCO_IncCities-FINAL.xls
+  * https://www.counties.org/data-and-research
 * road data (Jack)
 * NIHC (additional fire data) (Sara)
