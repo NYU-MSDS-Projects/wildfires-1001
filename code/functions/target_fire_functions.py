@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import descartes
 import sys
+import itertools
 
 ##Start by creating empty array into which we will fill data for selected timeframe and area
 def generate_target_frame(grid_data, min_year, max_year):
@@ -97,6 +98,9 @@ def disaggregate_fire_data(grid, fire_data, min_year, max_year):
     for row in fire_grid.itertuples():
         date_range = pd.date_range(row[list(fire_grid.columns).index('start_date')+1], \
                                    row[list(fire_grid.columns).index('end_date')+1], freq = 'D')
+        if len(date_range)> 365:
+            fires_dropped.append(row[list(fire_grid.columns).index('FIRE_KEY')])
+            continue
         if len(date_range) == 0:
             fires_dropped.append(row[list(fire_grid.columns).index('FIRE_KEY')])
             continue
