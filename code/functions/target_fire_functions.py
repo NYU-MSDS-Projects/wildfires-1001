@@ -1,3 +1,15 @@
+import pandas as pd  # provides interface for interacting with tabular data
+import geopandas as gpd  # combines the capabilities of pandas and shapely for geospatial operations
+from shapely.geometry import Point, Polygon, MultiPolygon  # for manipulating text data into geospatial shapes
+from shapely import wkt  # stands for "well known text," allows for interchange across GIS programs
+import rtree  # supports geospatial join
+import os
+import fnmatch
+import numpy as np
+import matplotlib.pyplot as plt
+import descartes
+import sys
+
 ##Start by creating empty array into which we will fill data for selected timeframe and area
 def generate_target_frame(grid_data, min_year, max_year):
     '''
@@ -71,7 +83,7 @@ def disaggregate_fire_data(grid, fire_data, min_year, max_year):
         - grid : GeoDataFrame of grid sections
         - fire_data : GeoDataFrame of fire data
     '''
-    fire_grid = fire_grid[(fire_grid['YEAR']>=min_year) & (fire_grid['YEAR']<=min_year)]
+    fire_data = fire_data[(fire_data['YEAR']>=min_year) & (fire_data['YEAR']<=min_year)]
     #Overlay grid and fire to get intersection geometry (this will create a dataframe with a few more fire
     #instances than we had in the plain fire_data 
     ##** Note that this will automatically exclude grid sections where this is no fire
