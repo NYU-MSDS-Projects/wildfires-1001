@@ -61,7 +61,7 @@ def generate_target_frame(grid_data, min_year, max_year):
     target_frame.drop(['year', 'month', 'week'], inplace = True, axis = 1)
     return target_frame
 
-def disaggregate_fire_data(grid, fire_data):
+def disaggregate_fire_data(grid, fire_data, min_year, max_year):
     ''' 
     Purpose: Create instances of wildfires occuring on a daily level. This function starts with daily because it
     is easier to aggregate up once we have all days represented in one dataframe
@@ -71,6 +71,7 @@ def disaggregate_fire_data(grid, fire_data):
         - grid : GeoDataFrame of grid sections
         - fire_data : GeoDataFrame of fire data
     '''
+    fire_grid = fire_grid[(fire_grid['YEAR']>=min_year) & (fire_grid['YEAR']<=min_year)]
     #Overlay grid and fire to get intersection geometry (this will create a dataframe with a few more fire
     #instances than we had in the plain fire_data 
     ##** Note that this will automatically exclude grid sections where this is no fire
