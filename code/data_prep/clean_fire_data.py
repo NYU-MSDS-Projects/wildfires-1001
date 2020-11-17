@@ -73,12 +73,12 @@ fire_data['FIRE_KEY'] = fire_data['FIRE_NAME'].apply(lambda x: str.replace(x, ' 
 fire_data = fire_data[fire_data['YEAR_']!='']
 fire_data = fire_data.dropna(subset = ['YEAR_'], axis = 0)
 fire_data['YEAR'] = fire_data['YEAR_'].astype(str).astype(int)
-fire_data = fire_data[fire_data['YEAR']>=min_year]
-print("fire_data shape after limiting to year >= {}: {}".format(min_year, fire_data.shape))
 
+fire_data.rename(columns = {'GIS_ACRES':'FIRE_ACRES', 'Shape_Area': 'FIRE_AREA'}, inplace = True)
 #Drop rows we don't need (keeping a bunch bc not sure what will be useful - need to do some more research
-fire_data.drop(['UNIT_ID', 'YEAR_', 'STATE', 'COMMENTS'], axis = 1, inplace = True)
+fire_data.drop(['UNIT_ID', 'YEAR_', 'STATE', 'COMMENTS', 'Shape_Length'], axis = 1, inplace = True)
 
+print(fire_data.columns.tolist())
 fire_data.to_file(os.path.join(home_dir, 'wildfires-1001/data/clean_data/fire_gis'))
 
                                       
