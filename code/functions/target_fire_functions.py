@@ -83,7 +83,7 @@ def disaggregate_fire_data(grid, fire_data, min_year, max_year):
         - grid : GeoDataFrame of grid sections
         - fire_data : GeoDataFrame of fire data
     '''
-    fire_data = fire_data[(fire_data['YEAR']>=min_year) & (fire_data['YEAR']<=min_year)]
+    fire_data = fire_data[(fire_data['YEAR']>=min_year) & (fire_data['YEAR']<=max_year)]
     #Overlay grid and fire to get intersection geometry (this will create a dataframe with a few more fire
     #instances than we had in the plain fire_data 
     ##** Note that this will automatically exclude grid sections where this is no fire
