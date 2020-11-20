@@ -111,3 +111,20 @@ def disaggregate_fire_data(grid, fire_data, min_year, max_year):
             print(row[0], row[list(fire_grid.columns).index('GRID_ID')+1], len(disagg_fire))
             print(disagg_fire['date'].head())
     return disagg_fire, fires_dropped
+
+
+
+
+#take in an object formatted as YYYY_MM and add a month
+def add_one_month(month_id_obj):
+    
+    #turn this object into a string
+    #split this and take the element after the '_'
+    #turn this back into an int
+    month_int = int(str(month_id_obj).split('_')[1])
+    
+    #check if the month is decemember -- if so, set to 1 if not, add one
+    if month_int == 12:
+        return 1
+    else:
+        return month_int+1
