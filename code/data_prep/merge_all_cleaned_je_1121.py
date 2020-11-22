@@ -352,18 +352,31 @@ for j in target_df_final_geo.columns:
 # In[28]:
 
 
+#removie duplicates
+target_df_final_geo = target_df_final_geo.loc[:,~target_df_final_geo.columns.duplicated()]
+
+
+# In[29]:
+
+
 #check we have the correct columns
 print(target_df_final_geo.columns.size)
 for k in target_df_final_geo.columns:
     print(k)
 
 
-# In[29]:
+# In[31]:
 
 
 #send to pkl files -- remember to rename the file and update date
 #need to split to allow to push to git
 n_rows = np.round(len(target_df_final_geo)/2,0).astype(int)
-target_df_final_geo.iloc[:n_rows].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_geo_1121_weathereng_1.pkl'))
-target_df_final_geo.iloc[n_rows:].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_geo_1121_weathereng_2.pkl'))
+target_df_final_geo.iloc[:n_rows].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_geo_1122_weathereng_1.pkl'))
+target_df_final_geo.iloc[n_rows:].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_geo_1122_weathereng_2.pkl'))
+
+
+# In[33]:
+
+
+target_df_final_geo.describe()
 
