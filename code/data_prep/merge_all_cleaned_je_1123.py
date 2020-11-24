@@ -22,13 +22,13 @@ sys.path.append('/Users/jackepstein/Documents/GitHub/wildfires-1001/code/functio
 data_dir = '/Users/jackepstein/Documents/GitHub/wildfires-1001/data'
 
 
-# In[2]:
+# In[478]:
 
 
 #read in the target variables for fire
 target_df = {}
 full_target_data = gpd.GeoDataFrame()
-for i in np.arange(1, 4):
+for i in np.arange(1, 5):
     target_df[i] = pd.read_pickle(os.path.join(data_dir, f'clean_data/target_full_{i}.pkl')) 
     full_target_data = full_target_data.append(target_df[i])
     
@@ -43,7 +43,14 @@ full_target_data2 = full_target_data.drop(columns=['date','month_start', 'month_
                                                   'week_start', 'week_end', 'start_date', 'end_date'])
 
 
-# In[3]:
+# In[479]:
+
+
+#check step -- do we have full date range?
+full_target_data['YEAR'].min(), full_target_data['YEAR'].max()
+
+
+# In[480]:
 
 
 #checking what one instance will look like
@@ -52,21 +59,21 @@ full_target_data2 = full_target_data.drop(columns=['date','month_start', 'month_
 
 # # Initial Group By
 
-# In[4]:
+# In[481]:
 
 
 #group by gridid and month and take means of fire data
 #y_bin, y_fire_class_size -- take max
 #y_fire_count -- count distinct of FIRE ID
 #y_fire_area prop -- done below with a separate dissolve and join rather than groupby 
-target_data_month = full_target_data2.groupby(['GRID_ID','month_id','YEAR', 'MONTH','COUNTYFP','NAME', 'GRID_AREA', 
-                                               'COUNTY_ARE']).agg({'Y_bin':'max', 
+target_data_month = full_target_data2.groupby(['GRID_ID','month_id','YEAR', 'MONTH','COUNTYFP',
+                                               'NAME', 'GRID_AREA']).agg({'Y_bin':'max', 
                                                                    'Y_fire_class_size': 'max',
                                                                    'FIRE_KEY':'nunique'}).reset_index()
 target_data_month = target_data_month.rename(columns={'FIRE_KEY': 'Y_fire_count'})
 
 
-# In[5]:
+# In[9]:
 
 
 #DO NOT RE-RUN UNLESS NEEDED VERY SLOW
@@ -81,7 +88,7 @@ sub_geo_df_2 = sub_geo_df.loc[~sub_geo_df['geometry'].isna()]
 sub_geo_dissolve = sub_geo_df_2.dissolve(by=['GRID_ID','month_id'])
 
 
-# In[6]:
+# In[482]:
 
 
 #reset the index and calcuate area
@@ -89,7 +96,20 @@ sub_geo_dissolve = sub_geo_dissolve.reset_index()
 sub_geo_dissolve['Fire_area'] = sub_geo_dissolve['geometry'].area
 
 
-# In[7]:
+# In[483]:
+
+
+sub_geo_dissolve = sub_geo_dissolve.drop(columns=['index'])
+
+
+# In[484]:
+
+
+#check -- do we still have the right columns?
+sub_geo_dissolve.columns
+
+
+# In[485]:
 
 
 #merge grouped by df with dissolved df
@@ -98,23 +118,22 @@ target_data_month = target_data_month.merge(sub_geo_dissolve, on=['GRID_ID','mon
 target_data_month['Fire_area'] = target_data_month['Fire_area'].fillna(0)
 
 
-# In[8]:
+# In[486]:
 
 
 #calculate target variable for regression
 target_data_month['Y_fire_area_prop'] = target_data_month['Fire_area']/target_data_month['GRID_AREA']
 
 
-# In[9]:
+# In[515]:
 
 
-#drop grid ID 59 -- no weather data
-target_data_month_df = target_data_month.loc[target_data_month['GRID_ID']!=59]
-#check for positive instances
-#target_data_month_df.loc[target_data_month_df['Y_bin']==1]
+#drop grid IDs 59, 93 -- no weather data
+target_data_month_sub = target_data_month.loc[target_data_month['GRID_ID']!=59]
+target_data_month_df = target_data_month_sub.loc[target_data_month['GRID_ID']!=93]
 
 
-# In[10]:
+# In[516]:
 
 
 #take in an object formatted as YYYY_MM
@@ -158,7 +177,7 @@ def sub_one_month(month_id_obj):
 
 # # Pull in the other simpler data sets (demogs, arson, topo, infr)
 
-# In[11]:
+# In[517]:
 
 
 #topography
@@ -168,7 +187,7 @@ topo_df['GRID_ID'] = topo_df['GRID_ID'].astype(int)
 topo_df = topo_df.drop(columns=topo_df.columns[0])
 
 
-# In[12]:
+# In[518]:
 
 
 #infrastructure
@@ -180,7 +199,7 @@ infr_df['month_id'] = infr_df['month_id'].apply(lambda x: add_one_month(x))
 infr_df = infr_df.drop(columns=infr_df.columns[0])
 
 
-# In[13]:
+# In[519]:
 
 
 #demographics
@@ -189,7 +208,7 @@ demographics_df = pd.read_csv((os.path.join(data_dir, 'clean_data/ca_demogs/demo
 demographics_df['YEAR'] = demographics_df['YEAR']+1
 
 
-# In[14]:
+# In[520]:
 
 
 #pull in built fire features
@@ -200,7 +219,7 @@ fire_feat['GRID_ID'] = fire_feat['GRID_ID'].astype(int)
 
 # # Merge with these
 
-# In[15]:
+# In[521]:
 
 
 #merge with topo
@@ -216,13 +235,20 @@ target_data_month_df = target_data_month_df.merge(demographics_df, on=['GRID_ID'
 target_data_month_df = target_data_month_df.merge(fire_feat, on=['GRID_ID','month_id'], how='left')
 
 
+# In[524]:
+
+
+#column number check - SHOULD BE 45
+print(target_data_month_df.shape,45==target_data_month_df.shape[1])
+
+
 # # Pull in and merge with weather
 
-# In[16]:
+# In[525]:
 
 
 #weather 
-era_weather = pd.read_pickle((os.path.join(data_dir, 'clean_data/ERA_weather-data/ERA5_CAgrid_gdf.pkl')))
+era_weather = pd.read_pickle((os.path.join(data_dir, 'clean_data/ERA_weather-data/ERA_weather_data.pkl')))
 era_weather['GRID_ID'] = era_weather['GRID_ID'].astype(int)
 
 
@@ -236,32 +262,39 @@ era_weather['month_id'] = era_weather['month_id'].apply(lambda x: add_one_month(
 era_weather = era_weather.drop(columns=['date','month','YEAR'])
 
 
-# In[17]:
+# In[526]:
 
 
 #merge weather
 target_data_month_df = target_data_month_df.merge(era_weather, on=['GRID_ID','month_id'], how='left')
 
 
+# In[528]:
+
+
+#column number check - SHOULD BE 78
+print(target_data_month_df.shape,78==target_data_month_df.shape[1])
+
+
 # # Merge with additional fire and weather features
 
-# In[18]:
+# In[529]:
 
 
 #read in historical features - no need to shift
-fire_hist = pd.read_pickle((os.path.join(data_dir, 'clean_data/engineered_features/fire_hist_features.pkl')))
+fire_hist = pd.read_pickle((os.path.join(data_dir, 'clean_data/engineered_features/fire_hist_features_no_leakage.pkl')))
 fire_hist['GRID_ID'] = fire_hist['GRID_ID'].astype(int)
 fire_hist = fire_hist.rename(columns={'month': 'MONTH', 'year':'YEAR'})
 
 
-# In[19]:
+# In[530]:
 
 
 #merge with main df
 target_data_month_df = target_data_month_df.merge(fire_hist, on=['GRID_ID','month_id', 'MONTH', 'YEAR'], how='left')
 
 
-# In[20]:
+# In[531]:
 
 
 #read in engineered weather - no need to shift
@@ -270,23 +303,59 @@ weather_hist = pd.read_pickle((os.path.join(data_dir, 'clean_data/engineered_fea
 weather_hist = weather_hist.rename(columns={'month': 'MONTH', 'year':'YEAR'})
 
 
-# In[21]:
+# In[532]:
 
 
 #merge with main df
 target_data_month_df = target_data_month_df.merge(weather_hist, on=['GRID_ID', 'MONTH', 'YEAR'], how='left')
 
 
+# In[533]:
+
+
+#column number check - SHOULD BE 190
+print(target_data_month_df.shape,190==target_data_month_df.shape[1])
+
+
+# # New Features from 11/23
+
+# In[534]:
+
+
+#this has aggregates by month -- can groupby and take mean
+no_leakage_df = pd.read_pickle((os.path.join(data_dir, 'clean_data/no_leakage_targets.pkl')))
+no_leakage_df.loc[no_leakage_df['month_id']=='2008_11'].loc[no_leakage_df['GRID_ID']==12]
+
+no_leakage = no_leakage_df.groupby(['month_id','GRID_ID']).max().reset_index()
+no_leakage['Y_bin_new_fire_month'] = no_leakage['Y_bin_new_fire_month'].astype(int)
+no_leakage['Y_max_new_fire_size_month'] = no_leakage['Y_max_new_fire_size_month'].astype(int)
+no_leakage['Y_count_new_fires_month'] = no_leakage['Y_count_new_fires_month'].astype(int)
+
+
+# In[535]:
+
+
+#merge with main df
+target_data_month_df = target_data_month_df.merge(no_leakage, on=['GRID_ID', 'month_id'], how='left')
+
+
+# In[537]:
+
+
+#column number check - SHOULD BE 190
+print(target_data_month_df.shape,194==target_data_month_df.shape[1])
+
+
 # # Final Clean Up and Send to Pickle
 
-# In[22]:
+# In[543]:
 
 
 #dropping jan 1990 with no weather data from the previous month
 target_df_final = target_data_month_df.loc[target_data_month_df['month_id']!='1990_1']
 
 
-# In[23]:
+# In[544]:
 
 
 #re-read in county grid to join with geometry
@@ -294,14 +363,21 @@ county_grid = gpd.read_file(os.path.join(data_dir, 'clean_data/county_grid/count
 county_grid['GRID_ID'] = county_grid['GRID_ID'].astype(int)
 
 
-# In[24]:
+# In[545]:
 
 
 #merge this with the initial df to get geometry
 target_df_final_geo = target_df_final.merge(county_grid[['GRID_ID','geometry']], on='GRID_ID', how='left')
 
 
-# In[25]:
+# In[548]:
+
+
+#column number check - SHOULD BE 194
+print(target_data_month_df.shape,194==target_data_month_df.shape[1])
+
+
+# In[549]:
 
 
 #load the naming dictionary
@@ -313,7 +389,7 @@ with open(weather_dict_path, 'rb') as handle:
 target_df_final_geo.rename(columns = rename_dict, inplace = True)    
 
 
-# In[26]:
+# In[550]:
 
 
 #functions to check if we have _x or _y
@@ -330,7 +406,7 @@ def find_y(col_name):
         return True
 
 
-# In[27]:
+# In[551]:
 
 
 #for _x, remove the _x
@@ -349,34 +425,49 @@ for j in target_df_final_geo.columns:
         target_df_final_geo = target_df_final_geo.drop(columns=[j])
 
 
-# In[28]:
+# In[552]:
 
 
 #removie duplicates
 target_df_final_geo = target_df_final_geo.loc[:,~target_df_final_geo.columns.duplicated()]
 
 
-# In[29]:
+# In[553]:
 
 
-#check we have the correct columns
+#check we have the correct columns - SHOULD BE 190
 print(target_df_final_geo.columns.size)
 for k in target_df_final_geo.columns:
     print(k)
 
 
-# In[31]:
+# In[554]:
+
+
+#check we have 
+targ_desc = target_df_final_geo.describe().T
+targ_desc.loc[targ_desc['count']!=35910]
+
+target_df_final_geo.groupby(['GRID_ID'])['GRID_ID'].count()
+
+
+# In[555]:
+
+
+#check we have
+grid_list = target_df_final_geo['GRID_ID'].unique()
+print("# of grids:",len(grid_list))
+print("obs per grid:",target_df_final_geo.shape[0]/len(grid_list))
+
+plt.bar(grid_list, target_df_final_geo.groupby(['GRID_ID'])['GRID_ID'].count())
+
+
+# In[556]:
 
 
 #send to pkl files -- remember to rename the file and update date
 #need to split to allow to push to git
 n_rows = np.round(len(target_df_final_geo)/2,0).astype(int)
-target_df_final_geo.iloc[:n_rows].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_geo_1122_weathereng_1.pkl'))
-target_df_final_geo.iloc[n_rows:].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_geo_1122_weathereng_2.pkl'))
-
-
-# In[33]:
-
-
-target_df_final_geo.describe()
+target_df_final_geo.iloc[:n_rows].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_1123_newtargets_1.pkl'))
+target_df_final_geo.iloc[n_rows:].to_pickle(os.path.join(data_dir, 'clean_data/target_df_final_1123_newtargets_2.pkl'))
 
