@@ -1,3 +1,5 @@
+import pandas as pd
+import numpy as np
 
 def select_features_corr_imp(df, feat_import, rho_cutoff, n_features):
     '''
