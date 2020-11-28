@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.metrics import auc, roc_curve
+from sklearn.metrics import auc, roc_curve, recall_score, confusion_matrix
+
 def select_features_corr_imp(df, feat_import, rho_cutoff, n_features):
     '''
     Purpose:
@@ -42,6 +43,12 @@ def select_features_corr_imp(df, feat_import, rho_cutoff, n_features):
     output_corr_df = df[selected_features].corr()
     return selected_features, output_corr_df
 
+
+'''
+***************************
+BINARY EVALUATION FUNCTIONS
+***************************
+'''
 
 def comb_auc_recall(y_true, y_proba, y_preds, recall_weight):
     '''
@@ -101,3 +108,67 @@ def EV_binary(y_true, y_preds, V_tp, V_tn, C_fp, C_fn):
     FPR = cm.iloc[0,1]
     EV = P_1*(TPR*V_tp + (1-TPR)*C_fn) + P_0*(FPR*C_fp + (1 - FPR)*V_tn)
     return EV
+
+
+
+'''
+********************************
+MULTI-CLASS EVALUATION FUNCTIONS
+********************************
+'''
+def multi_cost_matrix(classes, class_costs, weight_fp_fn = 0.25):
+    '''
+    Purpose: Function to generate cost matrix for multi-class problem
+    -------
+    Inputs:
+    -------
+        classes:        numpy 1D array
+                        list of classes in multi-class problem
+        class_costs :   numpy 1D array
+                        List of costs associated with classifying a given fire class size as a 0 (all other parts of 
+                        the cost matrix are calculated off these values). This must be in order of the classes.
+        weight_fp_fn :  float (default = 0.25)
+                        Weighting for the cost of a FP v. FN. False negatives are more costly than false positives 
+                        so we use a simple heuristic where we down-weight the cost of a FN to get a FP for each 
+                        type of mis-classification 
+    Returns:
+    -------
+        cost_matrix : numpy array
+    '''
+    
+    cost_matrix = np.zeros(16).reshape(4,4)
+    cost_matrix[:,0] = class_costs
+    cost_matrix[0,:] = class_costs*0.25
+    cost_matrix[2:4,1] = -1*(1 - cost_matrix[1,0]/cost_matrix[2:4,0])
+    cost_matrix[3,2] = -1*(1 - cost_matrix[2,0]/cost_matrix[3,0])
+    cost_matrix[1,2:4] = cost_matrix[2:4,1]*.25
+    cost_matrix[2, 3] = cost_matrix[3, 2]*.25
+    return cost_matrix
+
+def EV_multi(y_true, y_preds, classes, cost_matrix):
+    '''
+    Purpose: Generate cost sensitive expected value for binary classification of wildfires
+    -------
+    Inputs:
+    ------
+        y_true :      numpy array
+                      array of actual binary y values in test set
+        y_preds :     numpy array
+                      predictions from model
+        cost_matrix : numpy 2D array
+                      cost_matrix generated using multi_cost_matrix function
+    '''
+
+    #Geneate probabilities of different wildfire classes from testing data
+    P = {}
+    for c in classes:
+        P[c] = np.sum(y_true==c)/y_true.shape[0]
+
+    cm = pd.DataFrame(confusion_matrix(y_true, y_preds,normalize = 'true', labels = [0,1,2,3]), columns = classes, 
+                      index = classes)
+    #get expected values for each class
+    EV = {}
+    for c in classes:
+        EV[c] = P[c]*np.sum(cm[c]*cost_matrix[c])
+    EV_all = np.sum(list(EV.values()))
+    return EV_all
